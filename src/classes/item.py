@@ -19,3 +19,5 @@ class Item(WIBase):
     location_id: Mapped[int] = mapped_column(ForeignKey("locations.id"))
     location: Mapped["Location"] = relationship(back_populates="items")
 
+    def __repr__(self) -> str:
+        return f"Item('{self.name}', '{self.location_id}')"

@@ -24,4 +24,7 @@ class Location(WIBase):
         back_populates="location", cascade="all, delete-orphan"
     )
 
+    def __repr__(self) -> str:
+        return f"Location(id={self.id!r}, name={self.name!r}"
+
 

@@ -1,31 +1,25 @@
 from flask import Flask
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from flask_sqlalchemy import SQLAlchemy
 
 from src.classes.base import WIBase
 from src.classes.item import Item
 from src.classes.location import Location
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+db = SQLAlchemy(model_class=WIBase)
+db.init_app(app)
 
-engine = create_engine("sqlite://", echo=True)
-WIBase.metadata.create_all(engine)
-
-with Session(engine) as session:
-    home = Location(name="Home", sub_locations=[
-        Location(name="Kitchen", items=[
-            Item(name="USB"),
-            Item(name="Cups"),
-            Item(name="Plates")
-        ])
-    ], items=[
-        Item(name="Unknown Item")
-    ])
-
-    session.add_all([home])
-    session.commit()
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/api/v1/location")
 def get_location():
+    loc_session = db.session
+    query = select(Location).where(Location.name.in_(["Kitchen", "Home"]))
+    for location in loc_session.scalars(query):
+        print(location)
+    loc_session.close()
     return "Hello, World!"
