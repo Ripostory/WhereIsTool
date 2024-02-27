@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from sqlalchemy import select
 from flask_sqlalchemy import SQLAlchemy
 
@@ -14,12 +14,14 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+import src.error_handlers
+
 
 @app.route("/api/v1/location")
 def get_location():
     loc_session = db.session
     query = select(Location).where(Location.name.in_(["Kitchen", "Home"]))
+    output_location = []
     for location in loc_session.scalars(query):
-        print(location)
-    loc_session.close()
-    return "Hello, World!"
+        output_location.append(location.as_dict())
+    return jsonify(message='OK', data=output_location, status=200, mimetype='application/json')

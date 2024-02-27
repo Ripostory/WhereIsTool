@@ -1,6 +1,7 @@
 """
 The most basic unit of organization, a Location. Stores Items, and can contain sub-locations (such as shelves)
 """
+import json
 from typing import List
 from typing import Optional
 from sqlalchemy import ForeignKey
@@ -27,4 +28,5 @@ class Location(WIBase):
     def __repr__(self) -> str:
         return f"Location(id={self.id!r}, name={self.name!r}"
 
-
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
