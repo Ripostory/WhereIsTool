@@ -30,3 +30,14 @@ class Location(WIBase):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def update_from_key(self, key: str, value: any):
+        match key:
+            case "location_id":
+                pass
+            case "parent_location_id":
+                self.parent_location_id = value
+            case "name":
+                self.name = value
+            case _:
+                raise KeyError(f"{key} is Invalid")
