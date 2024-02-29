@@ -28,9 +28,18 @@ class Location(WIBase):
         return f"Location(id={self.id!r}, name={self.name!r})"
 
     def as_dict(self):
+        """
+
+        :return:
+        """
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     def update_from_key(self, key: str, value: any):
+        """
+
+        :param key: The entry to modify
+        :param value: The new value for the location entry
+        """
         match key:
             case "location_id":
                 pass
