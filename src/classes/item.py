@@ -20,7 +20,7 @@ class Item(WIBase):
     location: Mapped["Location"] = relationship(back_populates="items")
 
     def __repr__(self) -> str:
-        return f"Item('{self.name}', '{self.location_id}')"
+        return f"Item(name='{self.name}', location_id='{self.location_id}')"
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
